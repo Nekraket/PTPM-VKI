@@ -33,16 +33,22 @@ def process_triangle(side_a_str: str, side_b_str: str, side_c_str: str):
 
     try:
         cos_alpha = (a ** 2 + c ** 2 - b ** 2) / (2 * a * c)
+        logging.debug(f"[DEBUG] Вычислен cos(alpha) = {cos_alpha}")
+
         alpha = math.acos(cos_alpha)
+        logging.debug(f"[DEBUG] Угол alpha в радианах = {alpha}")
 
         cx = c * math.cos(alpha)
         cy = c * math.sin(alpha)
+        logging.debug(f"[DEBUG] Координаты третьей вершины (float): cx={cx}, cy={cy}")
 
         coordinates = [
             (0, 0),
             (int(round(a)), 0),
             (int(round(cx)), int(round(cy)))
         ]
+
+        logging.debug(f"[DEBUG] Координаты после округления до int: {coordinates}")
 
         if int(round(a)) > 100 or int(round(cx)) > 100 or int(round(cy)) > 100:
             logging.warning(f"Внимание: Фигура выходит за рамки поля 100x100 px! Координаты: {coordinates}")
@@ -55,6 +61,7 @@ def process_triangle(side_a_str: str, side_b_str: str, side_c_str: str):
         return "не треугольник", [(-1, -1), (-1, -1), (-1, -1)]
 
     logging.info(f"ИТОГ ЗАПРОСА => Тип: {triangle_type}, Координаты: {coordinates}")
+    print("-" * 60)
     return triangle_type, coordinates
 
 
@@ -93,16 +100,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-# root_logger = logging.getLogger()
-
-# if root_logger.handlers:
-#     first_handler = root_logger.handlers[0]
-#
-#     formatter = first_handler.formatter
-#
-#     print("Формат текста:", formatter._fmt)
-# else:
-#     print("Список handlers пуст")
