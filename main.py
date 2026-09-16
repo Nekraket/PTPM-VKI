@@ -15,9 +15,11 @@ def process_triangle(side_a_str: str, side_b_str: str, side_c_str: str):
         return "", [(-2, -2), (-2, -2), (-2, -2)]
 
     if a <= 0 or b <= 0 or c <= 0:
+        logging.error(f"Ошибка: Длины сторон должны быть строго больше нуля! (Передано: A={a}, B={b}, C={c})")
         return "не треугольник", [(-1, -1), (-1, -1), (-1, -1)]
 
     if (a + b <= c) or (a + c <= b) or (b + c <= a):
+        logging.warning(f"Предупреждение: Стороны {a}, {b}, {c} не могут образовать треугольник.")
         return "не треугольник", [(-1, -1), (-1, -1), (-1, -1)]
 
     if a == b == c:
@@ -27,13 +29,12 @@ def process_triangle(side_a_str: str, side_b_str: str, side_c_str: str):
     else:
         triangle_type = "разносторонний"
 
-    # Вершина A всегда в (0, 0). Вершина B на оси X: (a, 0).
+    logging.info(f"Успешно определен тип фигуры: {triangle_type}")
+
     try:
-        # Находим косинус угла между сторонами a и c по теореме косинусов
         cos_alpha = (a ** 2 + c ** 2 - b ** 2) / (2 * a * c)
         alpha = math.acos(cos_alpha)
 
-        # Дай бог помнить... чё-то там проекция на x это длина на косинус на y длина на sin
         cx = c * math.cos(alpha)
         cy = c * math.sin(alpha)
 
@@ -42,9 +43,18 @@ def process_triangle(side_a_str: str, side_b_str: str, side_c_str: str):
             (int(round(a)), 0),
             (int(round(cx)), int(round(cy)))
         ]
+
+        if int(round(a)) > 100 or int(round(cx)) > 100 or int(round(cy)) > 100:
+            logging.warning(f"Внимание: Фигура выходит за рамки поля 100x100 px! Координаты: {coordinates}")
+        else:
+            logging.info(f"Успешно рассчитаны координаты в поле: {coordinates}")
+
     except Exception:
+        logging.error("Произошла непредвиденная математическая ошибка при расчете координат.")
+        logging.exception("Трассировка ошибки расчетов:")
         return "не треугольник", [(-1, -1), (-1, -1), (-1, -1)]
 
+    logging.info(f"ИТОГ ЗАПРОСА => Тип: {triangle_type}, Координаты: {coordinates}")
     return triangle_type, coordinates
 
 
@@ -86,68 +96,13 @@ if __name__ == "__main__":
 
 
 
-
-# import logging
-#
-# try:
-#     a = 10
-#     for b in range(0, 3):
-#         logging.info(f"Итерация b = {b}")
-#
-#         if b == 0:
-#             logging.warning("Внимание, переменная b инициализирована нулем!")
-#
-#         logging.debug(f"Выполнение деления {a} на {b}")
-#         result = a / b
-#         logging.info(f"Деление {a} на {b} равно {result}")
-#
-# except ZeroDivisionError as ex:
-#     # Метод logging.exception() автоматически прикрепляет traceback (стек ошибки)
-#     logging.error("Что-то пошло не так...")
-#     logging.exception("Заход в блок обработки исключения:")
-
-
-
-
-
-
-# import logging
-# import sys
-#
-# # Шаблон строки лога (аналог template в Serilog)
-# # Содержит: время, уровень (до 7 символов для выравнивания), имя логгера и сообщение
-# log_format = "%(asctime)s | [%(levelname)-7s] | %(message)s"
-# date_format = "%Y-%m-%d %H:%M:%S"
-#
-# # Базовая настройка корневого логгера
-# logging.basicConfig(
-#     level=logging.DEBUG, # Минимальный уровень логирования (аналог MinimumLevel.Debug)
-#     format=log_format,
-#     datefmt=date_format,
-#     handlers=[
-#         logging.StreamHandler(sys.stdout),          # Настройка логирования в консоль
-#         logging.FileHandler("Logs/file_txt.log", encoding="utf-8") # Настройка логирования в файл
-#     ]
-# )
-#
-# logging.info("Логгер успешно сконфигурирован")
-# logging.info("Приложение запущено")
-#
 # root_logger = logging.getLogger()
-#
-#
-# # 3. Извлекаем уровень логирования (выведет 20, так как INFO = 20)
-# print("Уровень:", root_logger.level)
-#
-# # 4. Проверяем, что список обработчиков не пустой
+
 # if root_logger.handlers:
-#     # Берем самый первый обработчик из списка (под индексом 0)
 #     first_handler = root_logger.handlers[0]
 #
-#     # Берем объект форматирования у этого обработчика
 #     formatter = first_handler.formatter
 #
-#     # Выводим строку формата
 #     print("Формат текста:", formatter._fmt)
 # else:
 #     print("Список handlers пуст")
