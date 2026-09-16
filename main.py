@@ -1,12 +1,17 @@
+import logging
+import sys
 import math
 
-
 def process_triangle(side_a_str: str, side_b_str: str, side_c_str: str):
+    logging.info(f"Получен запрос на обработку сторон: A='{side_a_str}', B='{side_b_str}', C='{side_c_str}'")
+
     try:
         a = float(side_a_str)
         b = float(side_b_str)
         c = float(side_c_str)
     except ValueError:
+        logging.error("Ошибка: Входные данные содержат нечисловые значения.")
+        logging.exception("Детали исключения ValueError:")
         return "", [(-2, -2), (-2, -2), (-2, -2)]
 
     if a <= 0 or b <= 0 or c <= 0:
@@ -43,11 +48,41 @@ def process_triangle(side_a_str: str, side_b_str: str, side_c_str: str):
     return triangle_type, coordinates
 
 
+def main():
+    log_format = "%(asctime)s | [%(levelname)-7s] | %(message)s"
+    date_format = "%Y-%m-%d %H:%M:%S"
+
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format=log_format,
+        datefmt=date_format,
+        handlers=[
+            logging.StreamHandler(sys.stdout),
+            logging.FileHandler("Logs/file_txt.log", encoding="utf-8")
+        ]
+    )
+
+    logging.info("=== ЗАПУСК ПРИЛОЖЕНИЯ ===")
+
+    process_triangle("50", "50", "50")
+    print("-" * 60)
+
+    process_triangle("120", "120", "120")
+    print("-" * 60)
+
+    process_triangle("50", "-5", "50")
+    print("-" * 60)
+
+    process_triangle("10", "10", "100")
+    print("-" * 60)
+
+    process_triangle("очень-очень_хочу_спать", "50", "50")
+
+    logging.info("=== РАБОТА ЗАВЕРШЕНА ===")
+
+
 if __name__ == "__main__":
-    print("Хорошие данные (равносторонний):", process_triangle("50", "50", "50"))
-    print("Плохие числа (отрицательные):", process_triangle("50", "-5", "50"))
-    print("Не треугольник (стороны не сойдутся):", process_triangle("10", "10", "100"))
-    print("Текст вместо чисел:", process_triangle("хочу_спать", "50", "50"))
+    main()
 
 
 
