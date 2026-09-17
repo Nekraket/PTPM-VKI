@@ -81,19 +81,24 @@ def main():
 
     logging.info("=== ЗАПУСК ПРИЛОЖЕНИЯ ===")
 
-    process_triangle("50", "50", "50")
+    final1 = process_triangle("50", "50", "50")
+    print(final1)
     print("-" * 60)
 
-    process_triangle("120", "120", "120")
+    final2 = process_triangle("120", "120", "120")
+    print(final2)
     print("-" * 60)
 
-    process_triangle("50", "-5", "50")
+    final3 = process_triangle("50", "-5", "50")
+    print(final3)
     print("-" * 60)
 
-    process_triangle("10", "10", "100")
+    final4 = process_triangle("10", "10", "100")
+    print(final4)
     print("-" * 60)
 
-    process_triangle("очень-очень_хочу_спать", "50", "50")
+    final5 = process_triangle("очень-очень_хочу_спать", "50", "50")
+    print(final5)
 
     logging.info("=== РАБОТА ЗАВЕРШЕНА ===")
 
