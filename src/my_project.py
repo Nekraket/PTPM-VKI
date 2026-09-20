@@ -1,6 +1,7 @@
 import logging
 import sys
 import math
+import os
 
 def process_triangle(side_a_str: str, side_b_str: str, side_c_str: str):
     logging.info(f"Получен запрос на обработку сторон: A='{side_a_str}', B='{side_b_str}', C='{side_c_str}'")
@@ -66,6 +67,9 @@ def process_triangle(side_a_str: str, side_b_str: str, side_c_str: str):
 
 
 def main():
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(base_dir, '..', 'Logs', 'file_txt.log')
+
     log_format = "%(asctime)s | [%(levelname)-7s] | %(message)s"
     date_format = "%Y-%m-%d %H:%M:%S"
 
@@ -75,7 +79,7 @@ def main():
         datefmt=date_format,
         handlers=[
             logging.StreamHandler(sys.stdout),
-            logging.FileHandler("Logs/file_txt.log", encoding="utf-8")
+            logging.FileHandler(file_path, encoding="utf-8")
         ]
     )
 
