@@ -70,6 +70,8 @@ def main():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(base_dir, '..', 'Logs', 'file_txt.log')
 
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
     log_format = "%(asctime)s | [%(levelname)-7s] | %(message)s"
     date_format = "%Y-%m-%d %H:%M:%S"
 
